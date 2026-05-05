@@ -237,6 +237,11 @@ form.addEventListener("submit", (event) => {
   }
 
   saveAddress();
+
+  if (navigator.vibrate) {
+    navigator.vibrate(50);
+  }
+
   sendCommandUrl(commandUrl);
 });
 
