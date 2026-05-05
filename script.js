@@ -138,3 +138,11 @@ copyButton.addEventListener("click", async () => {
     setStatus("Copy failed. Select the command URL manually.", true);
   }
 });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").catch(() => {
+      // The app still works when service workers are unavailable or blocked.
+    });
+  });
+}

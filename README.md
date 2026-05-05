@@ -1,104 +1,104 @@
 # PS3 Home Button Helper
 
-A tiny static web page that opens the PS3 PS/Home button command endpoint:
+Use a PS4 controller on PS3 and need to go back to the XMB home menu?
+
+**PS3 Home Button Helper** is a small web app that sends the PS/Home button command to a compatible PS3 from your phone, tablet, or PC.
+
+It opens this local PS3 endpoint:
 
 ```text
 http://<PS3_ADDRESS>/pad.ps3?_psbtn_go
 ```
 
-It is meant for people using a PS4 controller on PS3 who need a quick way to return to the PS3 home menu without a native PS3 controller nearby.
+## Why This Exists
 
-## What This Project Does
+The PS4 controller works on PS3 for many games, but it does not behave exactly like a real PS3 controller. One annoying problem is the missing PS/Home button behavior.
 
-- Stores your PS3 local address in the browser.
-- Builds the correct `pad.ps3?_psbtn_go` command URL.
-- Opens that URL from a phone, tablet, or PC on the same local network.
-- Works as a simple GitHub Pages site with no build step and no backend.
+This helper gives you a quick shortcut: open the app on another device, tap one button, and send the PS/Home command to the console over your local network.
 
-This project does not pair controllers, install homebrew, modify your console, or add the endpoint by itself. It only opens a web command endpoint that must already exist on your PS3.
+## Features
+
+- One-tap PS/Home button command.
+- Works from phone, tablet, or PC.
+- Saves your PS3 address in the browser.
+- Installable on mobile as a Progressive Web App.
+- Standalone app-style display when launched from the home screen.
+- Automatic light and dark mode.
+- No account, no tracking, no backend.
 
 ## Requirements
 
-- A PS3 reachable from your local network.
-- A PS3 setup that exposes the `pad.ps3` web endpoint, such as webMAN MOD or another compatible homebrew setup.
-- A phone, tablet, or PC connected to the same local network as the PS3.
-- The PS3 local IP address, for example `192.168.1.50`.
+You need:
+
+- A PS3 on the same local network as your phone, tablet, or PC.
+- A PS3 setup that exposes the `pad.ps3` endpoint, such as webMAN MOD or another compatible setup.
+- The local IP address of your PS3, for example `192.168.1.50`.
+
+This app does not install homebrew, configure your PS3, pair controllers, or create the `pad.ps3` endpoint. It only opens the command URL that your PS3 already provides.
 
 ## How To Use
 
-1. Open the GitHub Pages site.
-2. Enter the local IP address or hostname of your PS3.
+1. Open the app.
+2. Enter your PS3 local IP address.
 3. Press **Send PS Button**.
-4. Your browser opens `http://<PS3_ADDRESS>/pad.ps3?_psbtn_go`.
+4. The app opens the PS3 command URL.
 
-The opened page may look blank or show a simple browser error after the command is sent. That can be normal, because the useful part is the request reaching the PS3.
+The page opened by the command may look blank or show a simple browser message. That can be normal. The important part is that the request reaches the PS3.
 
-## Why It Opens A Page Instead Of Using A Background Request
+## Install On Your Phone
 
-GitHub Pages is served over HTTPS. Most PS3 web endpoints are served over plain HTTP on the local network.
+This app can be added to your phone home screen.
 
-Modern browsers often block HTTPS pages from making background HTTP requests because that is considered mixed content. This helper avoids that problem by opening the command URL as a normal page navigation.
+### Android
 
-## Local Use
+1. Open the app in Chrome.
+2. Open the browser menu.
+3. Tap **Install app** or **Add to Home screen**.
+4. Launch **PS3 Home** from your home screen.
 
-You can also use the project without GitHub Pages:
+### iPhone
 
-1. Download or clone this repository.
-2. Open `index.html` in a browser.
-3. Enter your PS3 address and send the command.
+1. Open the app in Safari.
+2. Tap the share button.
+3. Tap **Add to Home Screen**.
+4. Launch **PS3 Home** from your home screen.
 
-No server, package manager, or build tool is required.
-
-## Deploy To GitHub Pages
-
-1. Create a new GitHub repository.
-2. Upload these files to the repository root:
-   - `index.html`
-   - `styles.css`
-   - `script.js`
-   - `README.md`
-   - `LICENSE`
-   - `.nojekyll`
-3. Open the repository settings on GitHub.
-4. Go to **Pages**.
-5. Set **Source** to **Deploy from a branch**.
-6. Select the `main` branch and the repository root.
-7. Save, then open the URL GitHub gives you.
+Once installed, it opens like a small standalone utility instead of a normal browser tab.
 
 ## Troubleshooting
 
-### The PS3 Does Not Respond
+### Nothing Happens On The PS3
 
-- Confirm the PS3 and your phone or PC are on the same Wi-Fi or wired LAN.
-- Confirm the PS3 IP address is correct.
-- Try opening `http://<PS3_ADDRESS>/` directly in your browser.
-- Make sure the software that provides `pad.ps3` is installed and running on the PS3.
+- Make sure the PS3 and your device are on the same local network.
+- Check that the PS3 IP address is correct.
+- Try opening `http://<PS3_ADDRESS>/` in your browser.
+- Make sure the software that provides `pad.ps3` is running on the PS3.
 
 ### The Browser Blocks The New Tab
 
-Use the **Open direct link** option after entering the PS3 address. Some browsers are strict about pop-ups, especially on mobile.
+Use **Open direct link** after entering your PS3 address. Some mobile browsers block new tabs unless they are opened directly by the user.
 
-### The Command URL Uses The Wrong Address
+### The Wrong Address Is Saved
 
-Edit the address field. The value is saved in your browser local storage, so each device can keep its own PS3 address.
+Edit the address field. The new value is saved automatically in your browser.
 
-## Security Notes
+## Privacy
 
-Keep the PS3 web endpoint on your local network only.
+Everything happens locally in your browser.
 
-Do not port-forward the PS3 web interface to the internet. The endpoint can trigger console input, so it should only be reachable by devices you trust on your LAN.
+The app stores only your PS3 address using browser local storage. It does not send data to a server, and it does not use analytics or tracking.
 
-## Project Structure
+## Security
 
-```text
-.
-├── index.html
-├── styles.css
-├── script.js
-├── README.md
-├── LICENSE
-└── .nojekyll
-```
+Keep your PS3 web interface available only on your local network.
+
+Do not expose or port-forward the PS3 web interface to the internet. The endpoint can trigger console input, so it should only be reachable from devices you trust.
+
+## Compatibility Notes
+
+This helper is intended for PS3 systems that already expose the `pad.ps3` endpoint. A stock PS3 will not respond to this command by default.
+
+Because the app may be served over HTTPS while the PS3 endpoint is usually plain HTTP, the command is opened as a normal page instead of being sent as a hidden background request. This avoids mixed-content blocking in modern browsers.
 
 ## License
 

@@ -257,6 +257,59 @@ code {
   font-size: 0.95em;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0f1416;
+    --panel: #151b1e;
+    --ink: #edf4f2;
+    --muted: #a8b4b1;
+    --line: #2b3639;
+    --accent: #57c7b8;
+    --accent-strong: #8be2d6;
+    --accent-soft: #193735;
+    --warning: #ffad72;
+    --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  }
+
+  body {
+    background:
+      linear-gradient(135deg, rgba(87, 199, 184, 0.13), transparent 38%),
+      linear-gradient(315deg, rgba(255, 173, 114, 0.1), transparent 34%),
+      var(--bg);
+  }
+
+  .tool-panel {
+    border-color: rgba(43, 54, 57, 0.95);
+    background: rgba(21, 27, 30, 0.94);
+  }
+
+  .brand-mark {
+    color: var(--accent-strong);
+  }
+
+  input {
+    color: var(--ink);
+    background: #111719;
+  }
+
+  input::placeholder {
+    color: #73807d;
+  }
+
+  input:focus {
+    box-shadow: 0 0 0 4px rgba(87, 199, 184, 0.18);
+  }
+
+  .icon-button:hover {
+    background: #214b47;
+  }
+
+  .endpoint-preview {
+    background: #111719;
+  }
+}
+
 @media (max-width: 520px) {
   .app-shell {
     align-items: start;
