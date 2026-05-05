@@ -87,6 +87,31 @@
         </header>
 
         <form id="commandForm" class="command-form" novalidate>
+          <div class="console-field">
+            <label for="consoleSelect">Console</label>
+            <div class="selector-row">
+              <select id="consoleSelect"></select>
+              <button class="icon-button icon-button--sm" id="addConsoleBtn" type="button" aria-label="Add console" title="Add console">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5v14"></path>
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button class="icon-button icon-button--sm icon-button--danger" id="removeConsoleBtn" type="button" aria-label="Remove console" title="Remove console">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 6h18"></path>
+                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="console-field">
+            <label for="consoleName">Console name</label>
+            <input id="consoleName" placeholder="PS3 Salotto" spellcheck="false">
+          </div>
+
           <label for="ps3Address">PS3 address</label>
           <div class="input-row">
             <input

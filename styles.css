@@ -181,6 +181,62 @@ h1 {
   gap: 14px;
 }
 
+.console-field {
+  display: grid;
+  gap: 6px;
+}
+
+.selector-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px 48px;
+  gap: 8px;
+}
+
+select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: var(--ink);
+  background: var(--input-bg);
+  outline: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.icon-button--sm {
+  width: 48px;
+  min-height: 48px;
+}
+
+.icon-button--danger {
+  color: var(--warning);
+  background: rgba(183, 85, 33, 0.1);
+}
+
+.icon-button--danger:hover {
+  background: rgba(183, 85, 33, 0.2);
+}
+
+:root[data-theme="dark"] .icon-button--danger {
+  background: rgba(255, 173, 114, 0.1);
+}
+
+:root[data-theme="dark"] .icon-button--danger:hover {
+  background: rgba(255, 173, 114, 0.2);
+}
+
+.icon-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 label {
   color: var(--muted);
   font-size: 0.95rem;

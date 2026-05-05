@@ -1,4 +1,4 @@
-const CACHE_NAME = "ps3-home-button-helper-v3";
+const CACHE_NAME = "ps3-home-button-helper-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
