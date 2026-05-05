@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="A tiny local-network helper that opens the PS3 PS/Home button command endpoint."
+    >
+    <meta name="theme-color" content="#101820">
+    <title>PS3 Home Button Helper</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="tool-panel" aria-labelledby="app-title">
+        <header class="tool-header">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" role="img">
+              <path
+                d="M18 28c-4.8 0-8.8 3.8-9 8.6L8.5 49a5 5 0 0 0 8.4 3.9l8-7.4h14.2l8 7.4a5 5 0 0 0 8.4-3.9L55 36.6c-.2-4.8-4.2-8.6-9-8.6H18Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-linejoin="round"
+                stroke-width="3"
+              />
+              <path
+                d="M27 21h10M32 11v19M24 38h-9M19.5 33.5v9M43 35.5h.1M49 41.5h.1"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="3"
+              />
+            </svg>
+          </div>
+          <div>
+            <p class="eyebrow">Local PS3 tool</p>
+            <h1 id="app-title">PS3 Home Button Helper</h1>
+          </div>
+        </header>
+
+        <form id="commandForm" class="command-form" novalidate>
+          <label for="ps3Address">PS3 address</label>
+          <div class="input-row">
+            <input
+              id="ps3Address"
+              name="ps3Address"
+              autocomplete="url"
+              inputmode="url"
+              placeholder="192.168.1.50"
+              spellcheck="false"
+              required
+            >
+            <button class="icon-button" id="copyButton" type="button" aria-label="Copy command URL">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 8h10v12H8z"></path>
+                <path d="M6 16H4V4h12v2"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="endpoint-preview" aria-live="polite">
+            <span>Command URL</span>
+            <output id="commandUrl">http://192.168.1.50/pad.ps3?_psbtn_go</output>
+          </div>
+
+          <div class="actions">
+            <button class="primary-button" type="submit">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+              Send PS Button
+            </button>
+            <a id="directLink" class="secondary-link" href="http://192.168.1.50/pad.ps3?_psbtn_go" target="_blank" rel="noreferrer">
+              Open direct link
+            </a>
+          </div>
+
+          <p id="statusMessage" class="status-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <details class="notes">
+          <summary>Connection notes</summary>
+          <ul>
+            <li>The PS3 and this device must be on the same local network.</li>
+            <li>The PS3 must already expose the <code>pad.ps3</code> endpoint.</li>
+            <li>GitHub Pages is HTTPS, so the command opens as a normal HTTP page.</li>
+          </ul>
+        </details>
+      </section>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
