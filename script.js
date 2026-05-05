@@ -150,7 +150,7 @@ function clearCommandFrame() {
   }
 }
 
-function sendCommandUrl(commandUrl) {
+function sendCommandWithFrame(commandUrl) {
   clearCommandFrame();
 
   commandFrame = document.createElement("iframe");
@@ -188,6 +188,32 @@ function sendCommandUrl(commandUrl) {
   setStatus("Sending PS/Home command...");
   commandFrame.src = commandUrl;
   document.body.appendChild(commandFrame);
+}
+
+async function sendCommandUrl(commandUrl) {
+  clearCommandFrame();
+  setStatus("Sending PS/Home command...");
+
+  if ("fetch" in window && "AbortController" in window) {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 5000);
+
+    try {
+      await fetch(commandUrl, {
+        method: "GET",
+        mode: "no-cors",
+        cache: "no-store",
+        signal: controller.signal
+      });
+      window.clearTimeout(timeoutId);
+      setStatus("PS/Home command sent. You can stay on this page.");
+      return;
+    } catch {
+      window.clearTimeout(timeoutId);
+    }
+  }
+
+  sendCommandWithFrame(commandUrl);
 }
 
 addressInput.value = loadSavedAddress();
