@@ -1,6 +1,11 @@
 const STORAGE_KEY = "ps3-home-button-helper.address";
+const THEME_STORAGE_KEY = "ps3-home-button-helper.theme";
 const DEFAULT_ADDRESS = "192.168.1.50";
 const COMMAND_PATH = "/pad.ps3?_psbtn_go";
+const THEME_COLORS = {
+  light: "#f4f6f5",
+  dark: "#0f1416"
+};
 
 const form = document.querySelector("#commandForm");
 const addressInput = document.querySelector("#ps3Address");
@@ -8,6 +13,11 @@ const commandUrlOutput = document.querySelector("#commandUrl");
 const directLink = document.querySelector("#directLink");
 const copyButton = document.querySelector("#copyButton");
 const statusMessage = document.querySelector("#statusMessage");
+const themeColorMeta = document.querySelector("#themeColor");
+const themeButtons = document.querySelectorAll("[data-theme-option]");
+const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+let commandFrame = null;
+let commandTimeoutId = 0;
 
 function normalizeAddress(value) {
   const trimmed = value.trim();
@@ -46,6 +56,52 @@ function loadSavedAddress() {
   }
 }
 
+function loadSavedTheme() {
+  try {
+    const theme = localStorage.getItem(THEME_STORAGE_KEY);
+    return theme === "light" || theme === "dark" ? theme : "auto";
+  } catch {
+    return "auto";
+  }
+}
+
+function getEffectiveTheme(theme) {
+  if (theme === "light" || theme === "dark") {
+    return theme;
+  }
+
+  return darkScheme.matches ? "dark" : "light";
+}
+
+function saveTheme(theme) {
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    // Theme persistence can be unavailable on file:// or in strict privacy modes.
+  }
+}
+
+function applyTheme(theme) {
+  const selectedTheme = theme === "light" || theme === "dark" ? theme : "auto";
+
+  if (selectedTheme === "auto") {
+    delete document.documentElement.dataset.theme;
+  } else {
+    document.documentElement.dataset.theme = selectedTheme;
+  }
+
+  themeButtons.forEach((button) => {
+    const isActive = button.dataset.themeOption === selectedTheme;
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+
+  if (themeColorMeta) {
+    themeColorMeta.content = THEME_COLORS[getEffectiveTheme(selectedTheme)];
+  }
+
+  saveTheme(selectedTheme);
+}
+
 function updateCommandUrl() {
   try {
     const commandUrl = getCommandUrl();
@@ -82,24 +138,60 @@ function saveAddress() {
   }
 }
 
-function openCommandUrl(commandUrl) {
-  const opened = window.open(commandUrl, "_blank");
-
-  if (!opened) {
-    setStatus("The browser blocked the new tab. Use the direct link instead.", true);
-    return;
+function clearCommandFrame() {
+  if (commandTimeoutId) {
+    window.clearTimeout(commandTimeoutId);
+    commandTimeoutId = 0;
   }
 
-  try {
-    opened.opener = null;
-  } catch {
-    // Some browsers lock the popup immediately after navigation.
+  if (commandFrame) {
+    commandFrame.remove();
+    commandFrame = null;
   }
+}
 
-  setStatus("Command opened. The PS3 may show an empty browser response.");
+function sendCommandUrl(commandUrl) {
+  clearCommandFrame();
+
+  commandFrame = document.createElement("iframe");
+  commandFrame.className = "command-frame";
+  commandFrame.title = "PS3 command response";
+  commandFrame.setAttribute("aria-hidden", "true");
+  commandFrame.tabIndex = -1;
+
+  commandFrame.addEventListener(
+    "load",
+    () => {
+      clearCommandFrame();
+      setStatus("PS/Home command sent. You can stay on this page.");
+    },
+    { once: true }
+  );
+
+  commandFrame.addEventListener(
+    "error",
+    () => {
+      clearCommandFrame();
+      setStatus("The browser blocked the background request. Use the direct link instead.", true);
+    },
+    { once: true }
+  );
+
+  commandTimeoutId = window.setTimeout(() => {
+    clearCommandFrame();
+    setStatus(
+      "No response was detected. If the PS3 did not react, use the direct link.",
+      true
+    );
+  }, 5000);
+
+  setStatus("Sending PS/Home command...");
+  commandFrame.src = commandUrl;
+  document.body.appendChild(commandFrame);
 }
 
 addressInput.value = loadSavedAddress();
+applyTheme(loadSavedTheme());
 updateCommandUrl();
 
 addressInput.addEventListener("input", updateCommandUrl);
@@ -119,7 +211,7 @@ form.addEventListener("submit", (event) => {
   }
 
   saveAddress();
-  openCommandUrl(commandUrl);
+  sendCommandUrl(commandUrl);
 });
 
 copyButton.addEventListener("click", async () => {
@@ -138,6 +230,24 @@ copyButton.addEventListener("click", async () => {
     setStatus("Copy failed. Select the command URL manually.", true);
   }
 });
+
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    applyTheme(button.dataset.themeOption);
+  });
+});
+
+function handleSystemThemeChange() {
+  if (loadSavedTheme() === "auto") {
+    applyTheme("auto");
+  }
+}
+
+if (typeof darkScheme.addEventListener === "function") {
+  darkScheme.addEventListener("change", handleSystemThemeChange);
+} else if (typeof darkScheme.addListener === "function") {
+  darkScheme.addListener(handleSystemThemeChange);
+}
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

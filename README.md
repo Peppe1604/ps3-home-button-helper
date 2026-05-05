@@ -23,7 +23,7 @@ This helper gives you a quick shortcut: open the app on another device, tap one 
 - Saves your PS3 address in the browser.
 - Installable on mobile as a Progressive Web App.
 - Standalone app-style display when launched from the home screen.
-- Automatic light and dark mode.
+- Automatic light and dark mode with an in-app theme selector.
 - No account, no tracking, no backend.
 
 ## Requirements
@@ -41,9 +41,9 @@ This app does not install homebrew, configure your PS3, pair controllers, or cre
 1. Open the app.
 2. Enter your PS3 local IP address.
 3. Press **Send PS Button**.
-4. The app opens the PS3 command URL.
+4. The app sends the PS3 command in the background and keeps you on the same screen.
 
-The page opened by the command may look blank or show a simple browser message. That can be normal. The important part is that the request reaches the PS3.
+If your browser blocks the background request, use **Open direct link** as a fallback. That option opens the PS3 command URL directly.
 
 ## Install On Your Phone
 
@@ -76,7 +76,7 @@ Once installed, it opens like a small standalone utility instead of a normal bro
 
 ### The Browser Blocks The New Tab
 
-Use **Open direct link** after entering your PS3 address. Some mobile browsers block new tabs unless they are opened directly by the user.
+Use **Open direct link** after entering your PS3 address. Some browsers block hidden HTTP requests from HTTPS pages, especially when the target is a local network device.
 
 ### The Wrong Address Is Saved
 
@@ -98,7 +98,7 @@ Do not expose or port-forward the PS3 web interface to the internet. The endpoin
 
 This helper is intended for PS3 systems that already expose the `pad.ps3` endpoint. A stock PS3 will not respond to this command by default.
 
-Because the app may be served over HTTPS while the PS3 endpoint is usually plain HTTP, the command is opened as a normal page instead of being sent as a hidden background request. This avoids mixed-content blocking in modern browsers.
+Because the app may be served over HTTPS while the PS3 endpoint is usually plain HTTP, some browsers may block the hidden background request. The direct link is included as a fallback for those cases.
 
 ## License
 

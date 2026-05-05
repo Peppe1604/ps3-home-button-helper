@@ -7,8 +7,7 @@
       name="description"
       content="A tiny local-network helper that opens the PS3 PS/Home button command endpoint."
     >
-    <meta name="theme-color" content="#f4f6f5" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0f1416" media="(prefers-color-scheme: dark)">
+    <meta id="themeColor" name="theme-color" content="#f4f6f5">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="PS3 Home">
@@ -17,6 +16,19 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <script>
+      (() => {
+        try {
+          const theme = localStorage.getItem("ps3-home-button-helper.theme");
+
+          if (theme === "light" || theme === "dark") {
+            document.documentElement.dataset.theme = theme;
+          }
+        } catch {
+          // Theme persistence can be unavailable in strict privacy modes.
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -41,9 +53,36 @@
               />
             </svg>
           </div>
-          <div>
+          <div class="title-block">
             <p class="eyebrow">Local PS3 tool</p>
             <h1 id="app-title">PS3 Home Button Helper</h1>
+          </div>
+          <div class="theme-switcher" role="group" aria-label="Theme">
+            <button class="theme-option" type="button" data-theme-option="auto" aria-label="Use system theme" aria-pressed="true" title="Auto theme">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+                <path d="M8 20h8"></path>
+                <path d="M12 16v4"></path>
+              </svg>
+            </button>
+            <button class="theme-option" type="button" data-theme-option="light" aria-label="Use light theme" aria-pressed="false" title="Light theme">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path>
+                <path d="m19.07 4.93-1.41 1.41"></path>
+              </svg>
+            </button>
+            <button class="theme-option" type="button" data-theme-option="dark" aria-label="Use dark theme" aria-pressed="false" title="Dark theme">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.3 14.4A8 8 0 0 1 9.6 3.7 8 8 0 1 0 20.3 14.4Z"></path>
+              </svg>
+            </button>
           </div>
         </header>
 
@@ -93,7 +132,7 @@
           <ul>
             <li>The PS3 and this device must be on the same local network.</li>
             <li>The PS3 must already expose the <code>pad.ps3</code> endpoint.</li>
-            <li>GitHub Pages is HTTPS, so the command opens as a normal HTTP page.</li>
+            <li>If your browser blocks the hidden request, use the direct link.</li>
           </ul>
         </details>
       </section>
