@@ -4,7 +4,7 @@ const LEGACY_KEY = "ps3-home-button-helper.address";
 const THEME_STORAGE_KEY = "ps3-home-button-helper.theme";
 const DEFAULT_ADDRESS = "192.168.1.50";
 const COMMAND_PATH = "/pad.ps3?_psbtn_go";
-const THEME_COLORS = { light: "#f4f6f5", dark: "#0f1416" };
+const THEME_COLORS = { light: "#f8f7fc", dark: "#080711" };
 
 const form = document.querySelector("#commandForm");
 const consoleSelect = document.querySelector("#consoleSelect");

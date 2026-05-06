@@ -1,11 +1,10 @@
-const CACHE_NAME = "ps3-home-button-helper-v4";
+const CACHE_NAME = "ps3-home-button-helper-v6";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./script.js",
   "./manifest.json",
-  "./icons/icon.svg",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png"
