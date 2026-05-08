@@ -1,5 +1,7 @@
 # PS3 Home Button Helper
 
+Version 1.1.0 is the current published release of the project.
+
 Use a PS4 controller on PS3 and need to go back to the XMB home menu?
 
 **PS3 Home Button Helper** is a small web app that sends the PS/Home button command to a compatible PS3 from your phone, tablet, or PC.
