@@ -14,6 +14,9 @@ const commandUrlOutput = document.querySelector("#commandUrl");
 const directLink = document.querySelector("#directLink");
 const copyButton = document.querySelector("#copyButton");
 const checkButton = document.querySelector("#checkButton");
+const installBanner = document.querySelector("#installBanner");
+const installButton = document.querySelector("#installButton");
+const installText = document.querySelector("#installText");
 const addBtn = document.querySelector("#addConsoleBtn");
 const removeBtn = document.querySelector("#removeConsoleBtn");
 const statusMessage = document.querySelector("#statusMessage");
@@ -23,6 +26,7 @@ const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 let commandFrame = null;
 let commandTimeoutId = 0;
 let consoles = [];
+let deferredInstallPrompt = null;
 
 /* ── Console management ── */
 
@@ -308,6 +312,56 @@ function applyTheme(theme) {
   saveTheme(sel);
 }
 
+/* Install prompt */
+
+function isStandaloneApp() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function isAppleMobile() {
+  const ua = navigator.userAgent || "";
+  return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function updateInstallBanner() {
+  if (!installBanner || isStandaloneApp()) {
+    if (installBanner) installBanner.hidden = true;
+    return;
+  }
+
+  if (deferredInstallPrompt) {
+    installText.textContent = "Install this helper for quick home-screen access.";
+    installButton.hidden = false;
+    installButton.disabled = false;
+    installBanner.hidden = false;
+    return;
+  }
+
+  if (isAppleMobile()) {
+    installText.textContent = "iPhone/iPad: open in Safari, then Share > Add to Home Screen.";
+    installButton.hidden = true;
+    installBanner.hidden = false;
+    return;
+  }
+
+  installBanner.hidden = true;
+}
+
+async function promptInstallApp() {
+  if (!deferredInstallPrompt) {
+    updateInstallBanner();
+    return;
+  }
+
+  installButton.disabled = true;
+  deferredInstallPrompt.prompt();
+  const choice = await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+
+  setStatus(choice.outcome === "accepted" ? "App install started." : "Install dismissed.");
+  updateInstallBanner();
+}
+
 /* ── Init ── */
 
 consoles = loadConsoles();
@@ -318,6 +372,7 @@ const savedId = loadActiveId();
 const initId = consoles.find(c => c.id === savedId) ? savedId : consoles[0].id;
 populateSelect(initId);
 selectConsole(initId);
+updateInstallBanner();
 
 /* ── Events ── */
 
@@ -348,6 +403,7 @@ copyButton.addEventListener("click", async () => {
 });
 
 checkButton.addEventListener("click", checkConnection);
+installButton.addEventListener("click", promptInstallApp);
 
 themeButtons.forEach(btn => {
   btn.addEventListener("click", () => applyTheme(btn.dataset.themeOption));
@@ -362,6 +418,18 @@ if (typeof darkScheme.addEventListener === "function") {
 } else if (typeof darkScheme.addListener === "function") {
   darkScheme.addListener(handleSystemThemeChange);
 }
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  updateInstallBanner();
+});
+
+window.addEventListener("appinstalled", () => {
+  deferredInstallPrompt = null;
+  setStatus("App installed.");
+  updateInstallBanner();
+});
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

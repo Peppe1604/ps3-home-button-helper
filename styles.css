@@ -184,6 +184,65 @@ h1 {
   stroke-width: 2;
 }
 
+.install-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: -8px 0 22px;
+  padding: 16px 0 18px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.install-banner[hidden] {
+  display: none;
+}
+
+.install-copy {
+  min-width: 0;
+}
+
+.install-title {
+  margin: 0 0 4px;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.install-copy p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.35;
+}
+
+.install-button {
+  min-height: 44px;
+  flex: 0 0 auto;
+  gap: 8px;
+  padding: 0 14px;
+  color: var(--button-text);
+  background: var(--accent-strong);
+  font-weight: 800;
+}
+
+.install-button:hover {
+  background: var(--accent);
+}
+
+.install-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.install-button svg {
+  width: 18px;
+  height: 18px;
+}
+
 .command-form {
   display: grid;
   gap: 14px;
@@ -279,7 +338,8 @@ input:focus {
 
 .icon-button,
 .primary-button,
-.secondary-button {
+.secondary-button,
+.install-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -300,7 +360,8 @@ input:focus {
 
 .icon-button svg,
 .primary-button svg,
-.secondary-button svg {
+.secondary-button svg,
+.install-button svg {
   width: 21px;
   height: 21px;
   fill: none;
@@ -495,6 +556,15 @@ code {
   .theme-switcher {
     grid-column: 1 / -1;
     justify-self: start;
+  }
+
+  .install-banner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .install-button {
+    width: 100%;
   }
 
   .brand-mark {

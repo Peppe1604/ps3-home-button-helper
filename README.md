@@ -39,6 +39,7 @@ This helper gives you a quick shortcut: open the app on another device, tap one 
 - Saves your PS3 address in the browser.
 - Checks whether the PS3 web address is reachable without sending the Home command.
 - Installable on mobile as a Progressive Web App.
+- Shows an in-app install prompt on supported mobile browsers.
 - Standalone app-style display when launched from the home screen.
 - Automatic light and dark mode with an in-app theme selector.
 - No account, no tracking, no backend.
@@ -65,14 +66,15 @@ If your browser blocks the background request, use **Open direct link** as a fal
 
 ## Install On Your Phone
 
-This app can be added to your phone home screen.
+This app can be added to your phone home screen and launched like a small standalone utility.
 
 ### Android
 
 1. Open the app in Chrome.
-2. Open the browser menu.
-3. Tap **Install app** or **Add to Home screen**.
-4. Launch **PS3 Home** from your home screen.
+2. If the in-app **Install app** button appears, tap it.
+3. If it does not appear, open the browser menu.
+4. Tap **Install app** or **Add to Home screen**.
+5. Launch **PS3 Home** from your home screen.
 
 ### iPhone
 
@@ -81,7 +83,7 @@ This app can be added to your phone home screen.
 3. Tap **Add to Home Screen**.
 4. Launch **PS3 Home** from your home screen.
 
-Once installed, it opens like a small standalone utility instead of a normal browser tab.
+On iPhone and iPad, Safari does not provide the same automatic install prompt as Android Chrome, so the app shows the shortest manual path instead.
 
 ## Troubleshooting
 
