@@ -278,7 +278,8 @@ input:focus {
 }
 
 .icon-button,
-.primary-button {
+.primary-button,
+.secondary-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -298,7 +299,8 @@ input:focus {
 }
 
 .icon-button svg,
-.primary-button svg {
+.primary-button svg,
+.secondary-button svg {
   width: 21px;
   height: 21px;
   fill: none;
@@ -342,6 +344,14 @@ output {
   margin-top: 4px;
 }
 
+.secondary-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .primary-button {
   min-height: 52px;
   gap: 10px;
@@ -354,6 +364,29 @@ output {
 
 .primary-button:hover {
   background: linear-gradient(135deg, var(--accent-strong), var(--accent-hot));
+}
+
+.secondary-button {
+  min-height: 44px;
+  gap: 8px;
+  padding: 0 12px;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  font-weight: 800;
+}
+
+.secondary-button:hover {
+  background: var(--icon-hover);
+}
+
+.secondary-button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.secondary-button svg {
+  width: 18px;
+  height: 18px;
 }
 
 .secondary-link {
@@ -443,7 +476,7 @@ code {
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .app-shell {
     align-items: start;
     padding: 14px;
@@ -471,6 +504,10 @@ code {
 
   .actions {
     grid-template-columns: 1fr;
+  }
+
+  .secondary-actions {
+    justify-content: center;
   }
 
   .secondary-link {

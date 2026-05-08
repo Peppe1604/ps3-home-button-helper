@@ -13,6 +13,7 @@ const addressInput = document.querySelector("#ps3Address");
 const commandUrlOutput = document.querySelector("#commandUrl");
 const directLink = document.querySelector("#directLink");
 const copyButton = document.querySelector("#copyButton");
+const checkButton = document.querySelector("#checkButton");
 const addBtn = document.querySelector("#addConsoleBtn");
 const removeBtn = document.querySelector("#removeConsoleBtn");
 const statusMessage = document.querySelector("#statusMessage");
@@ -139,6 +140,10 @@ function getCommandUrl() {
   return `${normalizeAddress(addressInput.value)}${COMMAND_PATH}`;
 }
 
+function getBaseUrl() {
+  return `${normalizeAddress(addressInput.value)}/`;
+}
+
 function setStatus(message, isWarning = false) {
   statusMessage.textContent = message;
   statusMessage.classList.toggle("is-warning", isWarning);
@@ -212,7 +217,68 @@ async function sendCommandUrl(url) {
   sendCommandWithFrame(url);
 }
 
-/* ── Theme ── */
+/* Connection check */
+
+function getCheckFailureMessage(error, baseUrl) {
+  if (error && error.name === "AbortError") {
+    return "No response before timeout. Check that the PS3 is on, on the same network, and running its web interface.";
+  }
+
+  if (window.location.protocol === "https:" && baseUrl.startsWith("http://")) {
+    return "The browser blocked the local HTTP check from this HTTPS page. Try Open direct link or run the app from HTTP/local file.";
+  }
+
+  return "The PS3 web address could not be reached. Check the IP address, Wi-Fi, and webMAN MOD status.";
+}
+
+async function checkConnection() {
+  if (!updateCommandUrl()) {
+    addressInput.focus();
+    return;
+  }
+
+  let baseUrl = "";
+  try {
+    baseUrl = getBaseUrl();
+  } catch (err) {
+    setStatus(err.message, true);
+    addressInput.focus();
+    return;
+  }
+
+  saveCurrentConsole();
+
+  if (!("fetch" in window) || !("AbortController" in window)) {
+    setStatus("This browser cannot run the background check. Open the PS3 address directly.", true);
+    return;
+  }
+
+  const mayBlockLocalHttp = window.location.protocol === "https:" && baseUrl.startsWith("http://");
+  setStatus(mayBlockLocalHttp
+    ? "Checking PS3 address. This browser may block local HTTP requests from HTTPS pages..."
+    : "Checking PS3 web address...");
+
+  checkButton.disabled = true;
+  const ctrl = new AbortController();
+  const timeoutId = window.setTimeout(() => ctrl.abort(), 5000);
+
+  try {
+    await fetch(baseUrl, {
+      method: "GET",
+      mode: "no-cors",
+      cache: "no-store",
+      signal: ctrl.signal
+    });
+    setStatus("PS3 web address responded. If Home still fails, confirm the pad.ps3 endpoint is enabled.");
+  } catch (err) {
+    setStatus(getCheckFailureMessage(err, baseUrl), true);
+  } finally {
+    window.clearTimeout(timeoutId);
+    checkButton.disabled = false;
+  }
+}
+
+/* Theme */
 
 function loadSavedTheme() {
   try {
@@ -280,6 +346,8 @@ copyButton.addEventListener("click", async () => {
     setStatus("Command URL copied.");
   } catch { setStatus("Copy failed. Select the command URL manually.", true); }
 });
+
+checkButton.addEventListener("click", checkConnection);
 
 themeButtons.forEach(btn => {
   btn.addEventListener("click", () => applyTheme(btn.dataset.themeOption));

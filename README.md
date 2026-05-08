@@ -10,6 +10,20 @@ It opens this local PS3 endpoint:
 http://<PS3_ADDRESS>/pad.ps3?_psbtn_go
 ```
 
+## Index
+
+- [Why This Exists](#why-this-exists)
+- [Features](#features)
+- [Requirements](#requirements)
+- [How To Use](#how-to-use)
+- [Install On Your Phone](#install-on-your-phone)
+- [Troubleshooting](#troubleshooting)
+- [Privacy](#privacy)
+- [Security](#security)
+- [Compatibility Notes](#compatibility-notes)
+- [License](#license)
+- [Disclaimer](#disclaimer)
+
 ## Why This Exists
 
 The PS4 controller works on PS3 for many games, but it does not behave exactly like a real PS3 controller. One annoying problem is the missing PS/Home button behavior.
@@ -21,6 +35,7 @@ This helper gives you a quick shortcut: open the app on another device, tap one 
 - One-tap PS/Home button command.
 - Works from phone, tablet, or PC.
 - Saves your PS3 address in the browser.
+- Checks whether the PS3 web address is reachable without sending the Home command.
 - Installable on mobile as a Progressive Web App.
 - Standalone app-style display when launched from the home screen.
 - Automatic light and dark mode with an in-app theme selector.
@@ -40,8 +55,9 @@ This app does not install homebrew, configure your PS3, pair controllers, or cre
 
 1. Open the app.
 2. Enter your PS3 local IP address.
-3. Press **Send PS Button**.
-4. The app sends the PS3 command in the background and keeps you on the same screen.
+3. Optional: press **Check PS3** to test whether the PS3 web interface responds.
+4. Press **Send PS Button**.
+5. The app sends the PS3 command in the background and keeps you on the same screen.
 
 If your browser blocks the background request, use **Open direct link** as a fallback. That option opens the PS3 command URL directly.
 
@@ -73,6 +89,12 @@ Once installed, it opens like a small standalone utility instead of a normal bro
 - Check that the PS3 IP address is correct.
 - Try opening `http://<PS3_ADDRESS>/` in your browser.
 - Make sure the software that provides `pad.ps3` is running on the PS3.
+
+### Check PS3 Fails
+
+- The check only tests the PS3 web address, not the Home button endpoint.
+- If the app is served over HTTPS, your browser may block checks to a local HTTP PS3 address.
+- Try **Open direct link** or open `http://<PS3_ADDRESS>/` directly in your browser.
 
 ### The Browser Blocks The New Tab
 
